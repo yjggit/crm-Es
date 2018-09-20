@@ -8,6 +8,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.List;
 @Service
 public class TestEsDao {
 
+    private static Logger logger = LoggerFactory.getLogger(TestEsDao.class);
+
     private static String INDEX = "browsing_history";
 
     TransportClient clientApi = TransportClientApi.getTransportClient();
@@ -31,7 +35,7 @@ public class TestEsDao {
             qb.must(QueryBuilders.termQuery("distance",distance));
         }
         if (orgName != null && !orgName.equals("")) {
-            qb.must(QueryBuilders.termQuery("orgName",orgName));
+            qb.must(QueryBuilders.termQuery("org_name",orgName));
         }
 
         SearchRequestBuilder query = clientApi.prepareSearch(INDEX)
@@ -41,6 +45,7 @@ public class TestEsDao {
                 .setSize(5);
 
         SearchResponse response = query.get();
+        logger.info("\n"+query);
         ArrayList<TestEsVO> list = new ArrayList<>();
         Iterator<SearchHit> hits = response.getHits().iterator();
         while (hits.hasNext()){
