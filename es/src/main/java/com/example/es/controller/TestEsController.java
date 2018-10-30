@@ -1,6 +1,7 @@
 package com.example.es.controller;
 
 import com.example.es.service.TestEsService;
+import com.example.es.vo.ElkTestVO;
 import com.example.es.vo.TestEsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,13 @@ public class TestEsController {
     @ResponseBody
     public List<TestEsVO> findData(String distance, String orgName){
         return testEsService.findData(distance,orgName);
+    }
+
+
+    @RequestMapping(value = "findMessage",method = RequestMethod.GET)
+    @ResponseBody
+    public List<ElkTestVO> findMessage(String message) {
+        return testEsService.findMessage(message);
     }
 
 }

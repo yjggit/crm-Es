@@ -1,6 +1,7 @@
 package com.example.es.dao;
 import com.alibaba.fastjson.JSONObject;
 import com.example.es.common.TransportClientApi;
+import com.example.es.vo.ElkTestVO;
 import com.example.es.vo.TestEsVO;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -27,7 +28,11 @@ public class TestEsDao {
 
     private static String INDEX = "browsing_history";
 
+    private static String ELK_INDEX = "logcrmapi";
+
     TransportClient clientApi = TransportClientApi.getTransportClient();
+
+    TransportClient client = TransportClientApi.getElkTransportClient();
 
     public List<TestEsVO> findData(String distance, String orgName){
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
@@ -56,4 +61,32 @@ public class TestEsDao {
 
         return list;
     }
+
+
+
+    public List<ElkTestVO> findMessage (String message) {
+        BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+        if (message != null && !message.equals("")) {
+            qb.must(QueryBuilders.termQuery("message",message));
+        }
+
+        SearchRequestBuilder query = client.prepareSearch(ELK_INDEX)
+                .setQuery(qb)
+                .setTypes("doc");
+        SearchResponse response = query.get();
+        logger.info("\n"+query);
+        ArrayList<ElkTestVO> list = new ArrayList();
+        Iterator<SearchHit> hits = response.getHits().iterator();
+        while (hits.hasNext()){
+            SearchHit hit = hits.next();
+
+            ElkTestVO vo = JSONObject.parseObject(hit.getSourceAsString(),ElkTestVO.class);
+            list.add(vo);
+        }
+        return list;
+    }
+
+
+
 }

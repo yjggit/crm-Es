@@ -2,6 +2,7 @@ package com.example.es.service.impl;
 
 import com.example.es.dao.TestEsDao;
 import com.example.es.service.TestEsService;
+import com.example.es.vo.ElkTestVO;
 import com.example.es.vo.TestEsVO;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -20,5 +21,10 @@ public class TestEsServiceImpl implements TestEsService {
     @Override
     public List<TestEsVO> findData(String distance, String orgName) {
         return testEsDao.findData(distance,orgName);
+    }
+
+    @Override
+    public List<ElkTestVO> findMessage(String message) {
+        return testEsDao.findMessage(message);
     }
 }
