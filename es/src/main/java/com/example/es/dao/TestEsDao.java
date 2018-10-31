@@ -7,8 +7,11 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -66,14 +69,18 @@ public class TestEsDao {
 
     public List<ElkTestVO> findMessage (String message) {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
 
+        highlightBuilder.field("message");
         if (message != null && !message.equals("")) {
-            qb.must(QueryBuilders.termQuery("message",message));
+            qb.must(QueryBuilders.matchQuery("message",message));
         }
 
         SearchRequestBuilder query = client.prepareSearch(ELK_INDEX)
                 .setQuery(qb)
-                .setTypes("doc");
+                .setTypes("doc")
+                .addSort("@timestamp", SortOrder.DESC)
+                .highlighter(highlightBuilder);
         SearchResponse response = query.get();
         logger.info("\n"+query);
         ArrayList<ElkTestVO> list = new ArrayList();
@@ -84,6 +91,7 @@ public class TestEsDao {
             ElkTestVO vo = JSONObject.parseObject(hit.getSourceAsString(),ElkTestVO.class);
             list.add(vo);
         }
+
         return list;
     }
 
