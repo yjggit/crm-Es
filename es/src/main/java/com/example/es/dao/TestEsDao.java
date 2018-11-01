@@ -13,11 +13,11 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author jianhui.Yang
@@ -31,6 +31,9 @@ public class TestEsDao {
     private static String INDEX = "browsing_history";
 
     private static String ELK_INDEX = "logcrmapi";
+
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     TransportClient clientApi = TransportClientApi.getTransportClient();
 
