@@ -8,7 +8,10 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -69,8 +72,8 @@ public class TestEsDao {
     public List<ElkTestVO> findMessage (String message) {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-
         highlightBuilder.field("message");
+
         if (message != null && !message.equals("")) {
             qb.must(QueryBuilders.matchQuery("message",message));
         }
@@ -90,10 +93,6 @@ public class TestEsDao {
             ElkTestVO vo = JSONObject.parseObject(hit.getSourceAsString(),ElkTestVO.class);
             list.add(vo);
         }
-
         return list;
     }
-
-
-
 }
