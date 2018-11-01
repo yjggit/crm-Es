@@ -79,7 +79,9 @@ public class TestEsDao {
                 .setQuery(qb)
                 .setTypes("doc")
                 .addSort("@timestamp", SortOrder.DESC)
-                .highlighter(highlightBuilder);
+                .highlighter(highlightBuilder)
+                .setFrom(0)
+                .setSize(5);
         SearchResponse response = query.get();
         logger.info("\n"+query);
         ArrayList<ElkTestVO> list = new ArrayList();
