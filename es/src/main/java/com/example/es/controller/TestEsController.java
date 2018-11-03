@@ -35,5 +35,10 @@ public class TestEsController {
         return testEsService.findMessage(message);
     }
 
+    @RequestMapping(value = "/queryMessage",method = RequestMethod.GET)
+    @ResponseBody
+    public ElkTestVO queryOneMessage (String message) {
+        return testEsService.queryOneMessgae(message);
+    }
 
 }

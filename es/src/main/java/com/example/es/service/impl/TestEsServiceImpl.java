@@ -27,4 +27,9 @@ public class TestEsServiceImpl implements TestEsService {
     public List<ElkTestVO> findMessage(String message) {
         return testEsDao.findMessage(message);
     }
+
+    @Override
+    public ElkTestVO queryOneMessgae(String message) {
+        return testEsDao.queyOneMessge(message);
+    }
 }

@@ -97,4 +97,33 @@ public class TestEsDao {
         }
         return list;
     }
+
+    public ElkTestVO queyOneMessge(String message) {
+        BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+        if (message != null && !message.equals("")) {
+            qb.must(QueryBuilders.matchQuery("message",message));
+        }
+
+        SearchRequestBuilder query = client.prepareSearch(ELK_INDEX)
+                .setSize(0)
+                .setSize(1)
+                .setTypes("doc")
+                .setQuery(qb);
+        SearchResponse response = query.get();
+        logger.info("\n"+query);
+        ElkTestVO elkTestVO = new ElkTestVO();
+        Iterator<SearchHit> hits = response.getHits().iterator();
+        while (hits.hasNext()) {
+            SearchHit hit = hits.next();
+            elkTestVO = JSONObject.parseObject(hit.getSourceAsString(),ElkTestVO.class);
+        }
+        return elkTestVO;
+    }
+
+
+
+
+
+
 }

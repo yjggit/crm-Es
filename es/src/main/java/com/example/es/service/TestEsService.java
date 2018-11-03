@@ -15,4 +15,6 @@ public interface TestEsService {
 
 
     List<ElkTestVO> findMessage(String message);
+
+    ElkTestVO queryOneMessgae (String message);
 }
