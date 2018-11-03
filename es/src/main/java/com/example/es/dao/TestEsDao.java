@@ -36,6 +36,13 @@ public class TestEsDao {
 
     TransportClient client = TransportClientApi.getElkTransportClient();
 
+    /**
+     * 三只眼ES查询demo
+     * @param distance
+     * @param orgName
+     * @return list
+     * @throws ApiException
+     */
     public List<TestEsVO> findData(String distance, String orgName) throws ApiException{
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
 
@@ -70,7 +77,12 @@ public class TestEsDao {
     }
 
 
-
+    /**
+     * ELK查询Demo
+     * @param message
+     * @return list
+     * @throws ApiException
+     */
     public List<ElkTestVO> findMessage (String message) throws ApiException {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -104,6 +116,12 @@ public class TestEsDao {
         return list;
     }
 
+    /**
+     * ELK查询Demo
+     * @param message
+     * @return elkTestVO
+     * @throws ApiException
+     */
     public ElkTestVO queyOneMessge(String message) throws ApiException {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
 
