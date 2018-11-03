@@ -1,6 +1,7 @@
 package com.example.es.dao;
 import com.alibaba.fastjson.JSONObject;
 import com.example.es.common.TransportClientApi;
+import com.example.es.exception.ApiException;
 import com.example.es.vo.ElkTestVO;
 import com.example.es.vo.TestEsVO;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -39,8 +41,13 @@ public class TestEsDao {
 
     TransportClient client = TransportClientApi.getElkTransportClient();
 
-    public List<TestEsVO> findData(String distance, String orgName){
+    public List<TestEsVO> findData(String distance, String orgName) throws ApiException{
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+        if (StringUtils.isEmpty(distance) && StringUtils.isEmpty(orgName)) {
+            throw new ApiException(distance + orgName);
+        }
+
         if (distance != null && !distance.equals("")) {
             qb.must(QueryBuilders.termQuery("distance",distance));
         }
@@ -69,10 +76,14 @@ public class TestEsDao {
 
 
 
-    public List<ElkTestVO> findMessage (String message) {
+    public List<ElkTestVO> findMessage (String message) throws ApiException {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("message");
+
+        if (StringUtils.isEmpty(message)) {
+            throw new ApiException(message);
+        }
 
         if (message != null && !message.equals("")) {
             qb.must(QueryBuilders.matchQuery("message",message));
@@ -98,8 +109,12 @@ public class TestEsDao {
         return list;
     }
 
-    public ElkTestVO queyOneMessge(String message) {
+    public ElkTestVO queyOneMessge(String message) throws ApiException {
         BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+        if (StringUtils.isEmpty(message)) {
+            throw new ApiException(message);
+        }
 
         if (message != null && !message.equals("")) {
             qb.must(QueryBuilders.matchQuery("message",message));

@@ -1,5 +1,6 @@
 package com.example.es.controller;
 
+import com.example.es.exception.ApiException;
 import com.example.es.service.TestEsService;
 import com.example.es.vo.ElkTestVO;
 import com.example.es.vo.TestEsVO;
@@ -24,20 +25,20 @@ public class TestEsController {
 
     @RequestMapping(value = "/findTest",method = RequestMethod.GET)
     @ResponseBody
-    public List<TestEsVO> findData(String distance, String orgName){
+    public List<TestEsVO> findData(String distance, String orgName) throws ApiException {
         return testEsService.findData(distance,orgName);
     }
 
 
     @RequestMapping(value = "findMessage",method = RequestMethod.GET)
     @ResponseBody
-    public List<ElkTestVO> findMessage(String message) {
+    public List<ElkTestVO> findMessage(String message) throws ApiException {
         return testEsService.findMessage(message);
     }
 
     @RequestMapping(value = "/queryMessage",method = RequestMethod.GET)
     @ResponseBody
-    public ElkTestVO queryOneMessage (String message) {
+    public ElkTestVO queryOneMessage (String message) throws ApiException {
         return testEsService.queryOneMessgae(message);
     }
 
