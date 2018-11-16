@@ -53,6 +53,7 @@ public class TestEsDao {
         if (distance != null && !distance.equals("")) {
             qb.must(QueryBuilders.termQuery("distance",distance));
         }
+
         if (orgName != null && !orgName.equals("")) {
             qb.must(QueryBuilders.termQuery("org_name",orgName));
         }
@@ -132,6 +133,7 @@ public class TestEsDao {
         if (message != null && !message.equals("")) {
             qb.must(QueryBuilders.matchQuery("message",message));
         }
+
 
         SearchRequestBuilder query = client.prepareSearch(ELK_INDEX)
                 .setSize(0)
