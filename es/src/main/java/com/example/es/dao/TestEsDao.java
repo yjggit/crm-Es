@@ -136,8 +136,6 @@ public class TestEsDao {
 
 
         SearchRequestBuilder query = client.prepareSearch(ELK_INDEX)
-                .setSize(0)
-                .setSize(1)
                 .setTypes("doc")
                 .setQuery(qb);
         SearchResponse response = query.get();
